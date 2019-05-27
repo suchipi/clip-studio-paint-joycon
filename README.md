@@ -7,10 +7,10 @@ Bindings:
 - Dpad Left/Right: Scroll through Pen, Pencil, Brush, and Eraser
 - Dpad Up: Hold for rotate tool
 - Dpad Down: Hold for hand tool
-- L: Eyedropper
+- L: Hold for eyedropper tool
 - ZL: Undo
 - SL: Redo
 - SR: Save
-- Analog Up: Increase Zoom
-- Analog Down: Decrease Zoom
+- Analog Up/Down: Increase/Decrease Zoom
+- Analog Left/Right: Switch through open applications (Command+Tab and Command+Shift+Tab)
 - Analog Stick Press: Reset Zoom and Press F12 (I recommend you bind F12 to "reset rotate/invert")

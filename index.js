@@ -1,13 +1,12 @@
 const JoyConL = require("./joycon-l");
 const KeyCycle = require("./key-cycle");
-const robot = require("robotjs");
-const execSync = require("child_process").execSync;
+const keyboard = require("./keyboard");
 
-function osascript(script) {
-  execSync(`osascript -e '${script}'`);
-}
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const joyconL = new JoyConL();
+console.log("Connected to Joy-Con");
+
 // dpadUp
 // dpadDown
 // dpadLeft
@@ -38,69 +37,76 @@ joyconL.on("down:dpadRight", () => {
 
 // Hold dpad down for hand tool
 joyconL.on("down:dpadDown", () => {
-  robot.keyToggle("space", "down");
+  keyboard.down("space");
 });
 joyconL.on("up:dpadDown", () => {
-  robot.keyToggle("space", "up");
+  keyboard.up("space");
 });
 
 // Hold dpad up for rotate tool
 joyconL.on("down:dpadUp", async () => {
-  osascript(`
-    tell application "System Events" to key down shift
-  `);
-  robot.keyToggle("space", "down");
+  keyboard.down("shift");
+  keyboard.down("space");
 });
 joyconL.on("up:dpadUp", async () => {
-  robot.keyToggle("space", "up");
-  osascript(`
-    tell application "System Events" to key up shift
-  `);
+  keyboard.up("space");
+  keyboard.up("shift");
 });
 
 // Hold L for picker tool
 joyconL.on("down:l", () => {
-  osascript(`
-    tell application "System Events" to key down option
-  `);
+  keyboard.down("option");
 });
 joyconL.on("up:l", () => {
-  osascript(`
-    tell application "System Events" to key up option
-  `);
+  keyboard.up("option");
 });
 
 // minus for command+tab
 joyconL.on("down:minus", () => {
-  robot.keyTap("tab", "command");
+  keyboard.tap("tab", "command");
 });
 
 // zl for undo
 joyconL.on("down:zl", () => {
-  robot.keyTap("z", "command");
+  keyboard.tap("z", "command");
 });
 
 // sl for redo
 joyconL.on("down:sl", () => {
-  robot.keyTap("y", "command");
+  keyboard.tap("y", "command");
 });
 
 // sr for save
 joyconL.on("down:sr", () => {
-  robot.keyTap("s", "command");
+  keyboard.tap("s", "command");
 });
 
 // Analog up/down for zoom
-joyconL.on("change:analogStick", (value) => {
-  if (value === JoyConL.Directions.UP) {
-    robot.keyTap("=", "command");
-  } else if (value === JoyConL.Directions.DOWN) {
-    robot.keyTap("-", "command");
+joyconL.on("change:analogStick", async (value) => {
+  switch (value) {
+    case JoyConL.Directions.UP: {
+      keyboard.tap("=", "command");
+      break;
+    }
+    case JoyConL.Directions.DOWN: {
+      keyboard.tap("-", "command");
+      break;
+    }
+    case JoyConL.Directions.RIGHT: {
+      keyboard.tap("tab", "command");
+      await sleep(100);
+      keyboard.tap("enter");
+    }
+    case JoyConL.Directions.LEFT: {
+      keyboard.tap("tab", ["shift", "command"]);
+      await sleep(100);
+      keyboard.tap("enter");
+    }
   }
 });
 
 // Press analog stick to reset zoom (and rotate, if you bind reset rotate to F12)
 joyconL.on("down:analogStickPress", () => {
-  robot.keyTap("0", ["command", "alt"]);
-  robot.keyTap("f12");
+  keyboard.tap("0", ["command", "alt"]);
+  keyboard.tap("f12");
 });

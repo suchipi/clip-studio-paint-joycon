@@ -14,9 +14,6 @@ const Directions = {
   UP_RIGHT: 0x07,
 };
 
-const vendorId = 1406;
-const hardwareId = 8198;
-
 class JoyConL extends EventEmitter {
   constructor() {
     super();
@@ -36,7 +33,22 @@ class JoyConL extends EventEmitter {
       analogStick: Directions.NONE,
     };
 
-    this.device = new HID.HID(vendorId, hardwareId);
+    const devices = HID.devices();
+    let path;
+    for (let device of devices) {
+      if (device.product === "Joy-Con (L)") {
+        path = device.path;
+        break;
+      }
+    }
+
+    if (path == null) {
+      throw new Error(
+        "It appears no left JoyCon is connected to your computer. Check your bluetooth settings and try again."
+      );
+    }
+
+    this.device = new HID.HID(path);
 
     onExit(() => {
       this.device.close();

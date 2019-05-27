@@ -1,4 +1,4 @@
-const robot = require("robotjs");
+const keyboard = require("./keyboard");
 
 module.exports = class KeyCycle {
   constructor(...keys) {
@@ -21,6 +21,6 @@ module.exports = class KeyCycle {
 
   _pressKeyAtIndex() {
     const key = this.keys[this.index];
-    robot.keyTap(key);
+    keyboard.tap(key);
   }
 };
