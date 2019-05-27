@@ -13,6 +13,12 @@ if (leftJoycons.length === 0) {
 
 const joyconL = leftJoycons[0].open();
 onExit(() => {
+  joyconL.setPlayerLEDs(
+    joyconL.LED_VALUES.ONE_FLASH +
+      joyconL.LED_VALUES.TWO_FLASH +
+      joyconL.LED_VALUES.THREE_FLASH +
+      joyconL.LED_VALUES.FOUR_FLASH
+  );
   joyconL.close();
 });
 
