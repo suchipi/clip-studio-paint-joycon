@@ -112,13 +112,15 @@ joyconL.on("change:analogStick", async (value) => {
     }
     case joyconL.Directions.RIGHT: {
       keyboard.tap("tab", "command");
-      await sleep(100);
+      await sleep(50);
       keyboard.tap("enter");
+      break;
     }
     case joyconL.Directions.LEFT: {
-      keyboard.tap("tab", ["shift", "command"]);
-      await sleep(100);
+      keyboard.tap("tab", ["command", "shift"]);
+      await sleep(50);
       keyboard.tap("enter");
+      break;
     }
   }
 });
