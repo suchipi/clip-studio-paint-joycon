@@ -1,10 +1,22 @@
-const JoyConL = require("./joycon-l");
+const { listConnectedJoyCons } = require("switch-joy-con");
+const onExit = require("on-exit");
 const KeyCycle = require("./key-cycle");
 const keyboard = require("./keyboard");
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const joyconL = new JoyConL();
+const joycons = listConnectedJoyCons();
+const leftJoycons = joycons.filter((device) => device.product.match("(L)"));
+if (leftJoycons.length === 0) {
+  throw new Error("No connected left Joy-Con");
+}
+
+const joyconL = leftJoycons[0].open();
+onExit(() => {
+  joyconL.close();
+});
+
+joyconL.setPlayerLEDs(joyconL.LED_VALUES.ONE);
 console.log("Connected to Joy-Con");
 
 // dpadUp
@@ -84,20 +96,20 @@ joyconL.on("down:sr", () => {
 // Analog up/down for zoom
 joyconL.on("change:analogStick", async (value) => {
   switch (value) {
-    case JoyConL.Directions.UP: {
+    case joyconL.Directions.UP: {
       keyboard.tap("=", "command");
       break;
     }
-    case JoyConL.Directions.DOWN: {
+    case joyconL.Directions.DOWN: {
       keyboard.tap("-", "command");
       break;
     }
-    case JoyConL.Directions.RIGHT: {
+    case joyconL.Directions.RIGHT: {
       keyboard.tap("tab", "command");
       await sleep(100);
       keyboard.tap("enter");
     }
-    case JoyConL.Directions.LEFT: {
+    case joyconL.Directions.LEFT: {
       keyboard.tap("tab", ["shift", "command"]);
       await sleep(100);
       keyboard.tap("enter");
