@@ -1389,10 +1389,10 @@ supports-color@^5.3.0:
   dependencies:
     has-flag "^3.0.0"
 
-switch-joy-con@1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/switch-joy-con/-/switch-joy-con-1.1.1.tgz#6cca3b41d4db0ba3736689cc345f440eb5dabd4b"
-  integrity sha512-pehlD3FfLKDes79gCl5vAc58QNpDywvweoCLto6BOf6ZNE4Jx1FzLO2wvM5auD/XJ9wQfoIIPHhhUijrrjMewQ==
+switch-joy-con@1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/switch-joy-con/-/switch-joy-con-1.1.3.tgz#f3e0f2dc7f0aa56895447d00b5e737da0548a549"
+  integrity sha512-ZN7LAGHXy+63Cb5i7Uvbb7y/hqEOWRF2DftVWU+4CvbCH8Q0ipDX/KuCQtoEK6lYu7OJPLCPmHvnokLqLbijuQ==
   dependencies:
     node-hid "^0.7.8"
 
