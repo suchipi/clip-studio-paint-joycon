@@ -22,7 +22,9 @@ onExit(() => {
   joyconL.close();
 });
 
-joyconL.setPlayerLEDs(joyconL.LED_VALUES.ONE);
+sleep(200).then(() => {
+  joyconL.setPlayerLEDs(joyconL.LED_VALUES.ONE);
+});
 console.log("Connected to Joy-Con");
 
 // dpadUp
