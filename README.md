@@ -1,4 +1,6 @@
-This script binds keys on a Nintendo Switch Left Joy-Con controller to keys and keystrokes that are useful while using Clip Studio Paint on a Mac.
+This script binds keys on a Nintendo Switch Left Joy-Con controller to keys and keystrokes that are useful while using Clip Studio Paint.
+
+It works on both Mac and Windows.
 
 You are welcome to clone and edit it to use for whatever you like (MIT License).
 
