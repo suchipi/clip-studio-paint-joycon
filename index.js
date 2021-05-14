@@ -1,31 +1,12 @@
-const { listConnectedJoyCons } = require("switch-joy-con");
-const onExit = require("on-exit");
+const getJoycon = require("./get-joycon");
 const KeyCycle = require("./key-cycle");
 const keyboard = require("./keyboard");
+const sleep = require("./sleep");
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-const joycons = listConnectedJoyCons();
-const leftJoycons = joycons.filter((device) => device.product.match("(L)"));
-if (leftJoycons.length === 0) {
-  throw new Error("No connected left Joy-Con");
-}
-
-const joyconL = leftJoycons[0].open();
-onExit(() => {
-  joyconL.setPlayerLEDs(
-    joyconL.LED_VALUES.ONE_FLASH +
-      joyconL.LED_VALUES.TWO_FLASH +
-      joyconL.LED_VALUES.THREE_FLASH +
-      joyconL.LED_VALUES.FOUR_FLASH
-  );
-  joyconL.close();
-});
-
-sleep(200).then(() => {
-  joyconL.setPlayerLEDs(joyconL.LED_VALUES.ONE);
-});
+const joyconL = getJoycon();
 console.log("Connected to Joy-Con");
+
+const isWindows = process.platform === "win32";
 
 // dpadUp
 // dpadDown
@@ -75,53 +56,93 @@ joyconL.on("up:dpadUp", async () => {
 
 // Hold L for picker tool
 joyconL.on("down:l", () => {
-  keyboard.down("option");
+  if (isWindows) {
+    keyboard.down("alt");
+  } else {
+    keyboard.down("option");
+  }
 });
 joyconL.on("up:l", () => {
-  keyboard.up("option");
+  if (isWindows) {
+    keyboard.up("alt");
+  } else {
+    keyboard.up("option");
+  }
 });
 
 // minus for command+tab
 joyconL.on("down:minus", () => {
-  keyboard.tap("tab", "command");
+  if (isWindows) {
+    keyboard.tap("tab", "alt");
+  } else {
+    keyboard.tap("tab", "command");
+  }
 });
 
 // zl for undo
 joyconL.on("down:zl", () => {
-  keyboard.tap("z", "command");
+  if (isWindows) {
+    keyboard.tap("z", "control");
+  } else {
+    keyboard.tap("z", "command");
+  }
 });
 
 // sl for redo
 joyconL.on("down:sl", () => {
-  keyboard.tap("y", "command");
+  if (isWindows) {
+    keyboard.tap("y", "control");
+  } else {
+    keyboard.tap("y", "command");
+  }
 });
 
 // sr for save
 joyconL.on("down:sr", () => {
-  keyboard.tap("s", "command");
+  if (isWindows) {
+    keyboard.tap("s", "control");
+  } else {
+    keyboard.tap("s", "command");
+  }
 });
 
 // Analog up/down for zoom
 joyconL.on("change:analogStick", async (value) => {
   switch (value) {
     case joyconL.Directions.UP: {
-      keyboard.tap("=", "command");
+      if (isWindows) {
+        keyboard.tap("=", "control");
+      } else {
+        keyboard.tap("=", "command");
+      }
       break;
     }
     case joyconL.Directions.DOWN: {
-      keyboard.tap("-", "command");
+      if (isWindows) {
+        keyboard.tap("-", "control");
+      } else {
+        keyboard.tap("-", "command");
+      }
       break;
     }
     case joyconL.Directions.RIGHT: {
-      keyboard.tap("tab", "command");
-      await sleep(50);
-      keyboard.tap("enter");
+      if (isWindows) {
+        keyboard.tap("tab", "alt");
+      } else {
+        keyboard.tap("tab", "command");
+        await sleep(50);
+        keyboard.tap("enter");
+      }
       break;
     }
     case joyconL.Directions.LEFT: {
-      keyboard.tap("tab", ["command", "shift"]);
-      await sleep(50);
-      keyboard.tap("enter");
+      if (isWindows) {
+        keyboard.tap("tab", "alt");
+      } else {
+        keyboard.tap("tab", ["command", "shift"]);
+        await sleep(50);
+        keyboard.tap("enter");
+      }
       break;
     }
   }
@@ -129,6 +150,10 @@ joyconL.on("change:analogStick", async (value) => {
 
 // Press analog stick to reset zoom (and rotate, if you bind reset rotate to F12)
 joyconL.on("down:analogStickPress", () => {
-  keyboard.tap("0", ["command", "alt"]);
+  if (isWindows) {
+    keyboard.tap("0", ["control", "alt"]);
+  } else {
+    keyboard.tap("0", ["command", "alt"]);
+  }
   keyboard.tap("f12");
 });
